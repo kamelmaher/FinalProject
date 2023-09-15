@@ -2,9 +2,10 @@ import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./store/store";
 import { logOut } from "./store/authSlice";
+import { ToastContainer } from "react-toastify";
 
 const Header = () => {
-    const {isAuth , user} = useAppSelector(state => state.auth)
+    const { isAuth, user } = useAppSelector((state) => state);
     const [toggleNavBar, setToggleNavBar] = useState(false);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -15,7 +16,19 @@ const Header = () => {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg bg-body-tertiary">
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+            />
+            <nav className="navbar navbar-expand-md bg-body-tertiary">
                 <div className="container m-auto">
                     <NavLink to={"/"} className="navbar-brand">
                         Book store App
@@ -36,19 +49,17 @@ const Header = () => {
                                     Home
                                 </NavLink>
                             </li>
-                            {isAuth && (
-                                <li className="nav-item">
-                                    <NavLink
-                                        to="/Dashboard"
-                                        className={({ isActive }) => {
-                                            return isActive ? "nav-link active" : "nav-link";
-                                        }}
-                                        aria-current="page"
-                                    >
-                                        Dashboard
-                                    </NavLink>
-                                </li>
-                            )}
+                            <li className="nav-item">
+                                <NavLink
+                                    to="/Dashboard"
+                                    className={({ isActive }) => {
+                                        return isActive ? "nav-link active" : "nav-link";
+                                    }}
+                                    aria-current="page"
+                                >
+                                    Dashboard
+                                </NavLink>
+                            </li>
                         </ul>
                         {isAuth == false ? (
                             <ul className="navbar-nav">

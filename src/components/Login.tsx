@@ -36,6 +36,9 @@ const Login = () => {
                     firstname: data.firstName,
                     lastname: data.lastName,
                 };
+
+                localStorage.setItem("access_token", data.token);
+
                 dispatch(loginUser(user));
                 navigate("/", { replace: true });
             })

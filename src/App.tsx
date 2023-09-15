@@ -1,106 +1,76 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import BookContainer from './components/Book/BookContainer';
-export type BookType = {
-  id: number
-  name: string,
-  author: string,
-  rating: number,
-  category: "Business" | "Science" | "Fiction" | "Phioilogy" | "Biology";
-
-}
-export const Books: BookType[] = [{
-  id: 1,
-    name: "Science Book",
-    author: "Kamel Maher",
-    category: "Science",
-    rating: 3
-  },
-  {
-    id: 2,
-    name: "Business Book",
-    author: "Ronaldo",
-    category: "Business",
-    rating: 4
-  },
-  {
-    id: 3,
-    name: "Fiction Book",
-    author: "Messi",
-    category: "Fiction",
-    rating: 3
-  },
-  {
-    id: 4,
-    name: "Biology Book",
-    author: "Karim Benzema",
-    category: "Biology",
-    rating: 1
-  },
-  {
-    id: 5,
-    name: "Phisiology Book",
-    author: "Kamel Maher",
-    category: "Phioilogy",
-    rating: 5
-  },
-  {
-    id: 6,
-    name: "Science Book",
-    author: "Kamel Maher",
-    category: "Science",
-    rating: 3
-  },
-  {
-    id: 7,
-    name: "Business Book",
-    author: "Ronaldo",
-    category: "Business",
-    rating: 4
-  },
-  {
-    id: 8,
-    name: "Fiction Book",
-    author: "Messi",
-    category: "Fiction",
-    rating: 3
-  },
-  {
-    id: 9,
-    name: "Biology Book",
-    author: "Karim Benzema",
-    category: "Biology",
-    rating: 1
-  },
-  {
-    id: 10,
-    name: "Phisiology Book",
-    author: "Kamel Maher",
-    category: "Phioilogy",
-    rating: 5
-  },]
+// import ApiClicent from './services/ApiClicent';
+import { BookType } from './types/Book';
+import UseFetch from './UseFetch';
+import PlaceHolder from './components/Book/PlaceHolder';
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import logo from "../img/logo.jpeg"
+// import { A11y, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 function App() {
   const [active, setActive] = useState(0);
-  const [selctedBooks, setSelectedBooks] = useState<BookType[]>(Books);
+  const { Books, isLoading } = UseFetch<BookType[]>("/Book", []);
+  const [selctedBooks, setSelectedBooks] = useState<BookType[]>([]);
+  useEffect(() => {
+    setSelectedBooks(Books);
+  }, [Books]);
+  // useEffect(() => {
+  //   // ApiClicent.get<BookType[]>("/Book").then(({ data }) => {
+  //     //   console.log(data)
+  //     //   setBooks(data)
+  //     //   setSelectedBooks(data)
+  //     // })
+
+  //   }, [])
+
   return (
     <>
-      <div className="mt-4 container m-auto">
+      {/* <Swiper
+        // install Swiper modules
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={50}
+        slidesPerView={3}
+        navigation
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        onSwiper={(swiper) => console.log(swiper)}
+        onSlideChange={() => console.log('slide change')}
+      >
+        <SwiperSlide className='text-center'><img src={logo} alt="" /></SwiperSlide>
+        <SwiperSlide><img src={logo} alt="" /></SwiperSlide>
+        <SwiperSlide><img src={logo} alt="" /></SwiperSlide>
+        <SwiperSlide><img src={logo} alt="" /></SwiperSlide>
+      </Swiper> */}
+      <div className="container m-auto mt-4">
         <div className="row justify-content-between">
           <div className="col-md-4">
             <p className='fw-semibold fs-5 text-center text-md-start mb-2'>Popular by Genre </p>
           </div>
           <div className="col-md-8">
             <ul className='list-unstyled d-flex flex-wrap gap-3 tabs '>
-              {["All Books", "Business", "Science", "Fiction", "Phioilogy", "Biology"].map((e, index) => {
+              {["All Books", "Business", "Science", "Fiction", "Philosophy", "Biology"].map((e, index) => {
                 return <li key={index} className={`${active == index && "active"}`} onClick={() => {
                   setActive(index);
-                  setSelectedBooks(e == "All Books" ? Books : Books.filter(t => t.category == e));
+                  setSelectedBooks(e == "All Books" ? Books : Books.filter(t => t.category.name == e))
                 }}>{e}</li>
               })}
             </ul>
           </div>
         </div>
-        <BookContainer arr={selctedBooks} />
+        {isLoading ?
+          <div className="row">
+            <PlaceHolder />
+            <PlaceHolder />
+            <PlaceHolder />
+            <PlaceHolder />
+            <PlaceHolder />
+            <PlaceHolder />
+          </div> :
+          <>
+            <BookContainer arr={selctedBooks} />
+          </>
+        }
       </div>
     </>
   )

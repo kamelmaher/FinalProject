@@ -1,15 +1,24 @@
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../node_modules/react-toastify/dist/ReactToastify.min.css";
+@import "../node_modules/swiper/swiper.min.css";
+
 * {
-    margin: 0 !important;
     box-sizing: border-box !important;
 }
+
+.modal-backdrop.show {
+    opacity: .5 !important;
+}
+
 body {
     background-color: #f1f5f8;
 }
+
 .tabs {
     width: fit-content;
     margin-left: auto !important;
 }
+
 .tabs li {
     padding-bottom: 10px;
     border-bottom: 2px solid transparent;
@@ -17,27 +26,32 @@ body {
     color: rgb(196, 194, 194);
     transition: .2s;
 }
+
 .tabs li.active {
     border-color: aqua;
     color: black;
 }
+
 /* Book */
 .book {
     box-shadow: #1311201a 0px 2px 10px 0px;
 }
+
 .image {
     margin-top: -20px !important;
 }
+
 .image img {
     box-shadow: #1311201a 0px 2px 10px 0px
 }
+
 @media (max-width: 768px) {
     .image {
         margin: auto !important;
-        text-align: center  ;
+        text-align: center;
     }
+
     .image img {
         width: 50% !important;
     }
 }
-/* Book */
