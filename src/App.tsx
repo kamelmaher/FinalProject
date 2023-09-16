@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import BookContainer from './components/Book/BookContainer';
-// import ApiClicent from './services/ApiClicent';
 import { BookType } from './types/Book';
 import UseFetch from './UseFetch';
 import PlaceHolder from './components/Book/PlaceHolder';
-// import { Swiper, SwiperSlide } from 'swiper/react';
-// import logo from "../img/logo.jpeg"
-// import { A11y, Navigation, Pagination, Scrollbar } from 'swiper/modules';
+
 function App() {
   const [active, setActive] = useState(0);
   const { Books, isLoading } = UseFetch<BookType[]>("/Book", []);
@@ -15,33 +12,10 @@ function App() {
   useEffect(() => {
     setSelectedBooks(Books);
   }, [Books]);
-  // useEffect(() => {
-  //   // ApiClicent.get<BookType[]>("/Book").then(({ data }) => {
-  //     //   console.log(data)
-  //     //   setBooks(data)
-  //     //   setSelectedBooks(data)
-  //     // })
-
-  //   }, [])
-
   return (
     <>
-      {/* <Swiper
-        // install Swiper modules
-        modules={[Navigation, Pagination, Scrollbar, A11y]}
-        spaceBetween={50}
-        slidesPerView={3}
-        navigation
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => console.log(swiper)}
-        onSlideChange={() => console.log('slide change')}
-      >
-        <SwiperSlide className='text-center'><img src={logo} alt="" /></SwiperSlide>
-        <SwiperSlide><img src={logo} alt="" /></SwiperSlide>
-        <SwiperSlide><img src={logo} alt="" /></SwiperSlide>
-        <SwiperSlide><img src={logo} alt="" /></SwiperSlide>
-      </Swiper> */}
+      <div className='row'>
+      </div>
       <div className="container m-auto mt-4">
         <div className="row justify-content-between">
           <div className="col-md-4">

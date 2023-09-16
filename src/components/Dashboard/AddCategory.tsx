@@ -37,7 +37,7 @@ const AddCategory = () => {
                     <h3 className="mb-3 text-center fw-semibold">Add Category</h3>
                     <div>
                         <label className="mb-2">Name:</label>
-                        <input type="text" className="form-control" {...register("name", { required: "true" , minLength: 5 })} />
+                        <input type="text" className="form-control" {...register("name", { required: "true", minLength: 5 })} />
                     </div>
                     {errors.name?.type == "required" && <p className="text-danger">Category is required</p>}
                     {errors.name?.type == "minLength" && <p className="text-danger">Category is too small</p>}
@@ -56,7 +56,7 @@ const AddCategory = () => {
             {/* Table */}
             <div className="col-12">
                 {categoryLoading ?
-                        <TablePlaceHolder />
+                    <TablePlaceHolder />
                     :
                     <table className="table mt-4 text-center">
                         <thead>

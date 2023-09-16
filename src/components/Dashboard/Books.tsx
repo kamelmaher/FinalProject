@@ -2,7 +2,7 @@ import { BookType } from "../../types/Book"
 import { NavLink } from "react-router-dom"
 import UseFetch from "../../UseFetch"
 import { useEffect, useState } from "react"
-import {  toast } from "react-toastify"
+import { toast } from "react-toastify"
 import ApiClicent from "../../services/ApiClicent"
 import Modal from "../../Portals/Modal"
 import TablePlaceHolder from "./TablePlaceHolder"
@@ -12,7 +12,7 @@ const Books = () => {
     const [myBooks, setMyBooks] = useState<BookType[]>([])
     const { Books: books, isLoading } = UseFetch<BookType[]>("/Book", [])
     const [show, setShow] = useState(false)
-    const [deleteLoading , setDeleteLoading] = useState(false)
+    const [deleteLoading, setDeleteLoading] = useState(false)
     useEffect(() => {
         setMyBooks(books);
     }, [books])
@@ -20,7 +20,7 @@ const Books = () => {
         {isLoading ? <>
             <TablePlaceHolder />
             <TablePlaceHolder />
-            </> :
+        </> :
             <div style={{
                 overflowX: "auto",
                 width: "100%"

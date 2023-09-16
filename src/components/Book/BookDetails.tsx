@@ -5,10 +5,17 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from "react";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { addToCart } from "../../store/CartSlice";
+import { toast } from "react-toastify";
 const BookDetails = () => {
     const { bookid } = useParams();
     const { Books: selectedBook, isLoading } = UseFetch("/Book/" + bookid, {} as BookType);
     const [favorite, setFavorite] = useState(false);
+    // const [inCart , setInCart ] = useState(false)
+    const dispatch = useAppDispatch()
+    const items = useAppSelector(state => state.items)
+    const inCart = items.find(e => e.id == parseInt(bookid!))
     return (
         <>
             {!isLoading && <div className="row w-75 m-auto justify-content-center pt-5 pb-5 align-items-center">
@@ -43,7 +50,10 @@ const BookDetails = () => {
                     </div>
                     <p className="text-success fw-semibold">Publish Year: <span className="text-primary">{selectedBook.publishYear}</span></p>
                     <div className="mt-3">
-                        <button className="btn btn-primary me-3">
+                        <button className="btn btn-primary me-3" disabled={inCart != undefined} onClick={()=> {
+                            dispatch(addToCart(selectedBook))
+                            toast.success("Book Added Succefully!")
+                        }}>
                             <ShoppingCartIcon style={{marginRight: "7px" , fontSize: "18px"}}/>
                             Add To Cart</button>
                         <NavLink to={"/"} className="btn btn-primary">All Books</NavLink>

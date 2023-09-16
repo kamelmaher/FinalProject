@@ -15,6 +15,7 @@ import Books from './components/Dashboard/Books.tsx'
 import AddAuthor from './components/Dashboard/AddAuthor.tsx'
 import AddCategory from './components/Dashboard/AddCategory.tsx'
 import Protected from './Protected.tsx'
+import Cart from './components/Cart/Cart.tsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,6 +34,8 @@ const router = createBrowserRouter(
         <Route path='/dashboard/books/category' element={<AddCategory />}></Route>
       </Route>
       <Route path='book/details/:bookid' element={<BookDetails />}>
+      </Route>
+      <Route path='/Cart' element={<Cart />}>
       </Route>
     </Route>
   )

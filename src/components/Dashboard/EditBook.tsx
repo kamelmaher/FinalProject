@@ -24,28 +24,28 @@ const EditBook = () => {
             .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
     })
     type BookFormData = z.infer<typeof schema>
-    const { register , setValue, handleSubmit, formState: { errors } } = useForm<BookFormData>({
+    const { register, setValue, handleSubmit, formState: { errors } } = useForm<BookFormData>({
         resolver: zodResolver(schema),
     })
     const { bookid } = useParams()
     const [book, setBook] = useState<BookType>({} as BookType);
     const [isLoading, setIsLoading] = useState(true)
-    const [editLoading , setEditLoading] = useState(false)
-    const {Books:category , isLoading:categoryLoading} = UseFetch<category[]>("/Category" ,[])
-    const {Books:author , isLoading:authorLoading} = UseFetch<author[]>("/Author" ,[])
-    const [selectedAuthor ,setSelectedAuthor] = useState(-1)
-    const [selectedCategory ,setSelectedCategory] = useState(-1)
+    const [editLoading, setEditLoading] = useState(false)
+    const { Books: category, isLoading: categoryLoading } = UseFetch<category[]>("/Category", [])
+    const { Books: author, isLoading: authorLoading } = UseFetch<author[]>("/Author", [])
+    const [selectedAuthor, setSelectedAuthor] = useState(-1)
+    const [selectedCategory, setSelectedCategory] = useState(-1)
     useEffect(() => {
         setIsLoading(true);
         ApiClicent.get(`/Book/${bookid}`).then(({ data }) => {
-            setValue("ImageFile" , data.image[0])
-            setValue("Name" , data.name)
+            setValue("ImageFile", data.image[0])
+            setValue("Name", data.name)
             setSelectedAuthor(data.author.id)
             setSelectedCategory(data.category.id)
             setBook(data)
             setIsLoading(false)
         })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const navigate = useNavigate()
     return <>
@@ -127,14 +127,14 @@ const EditBook = () => {
                             </select>
                         </div>}
                         {
-                        !categoryLoading && <div className="mb-3">
-                            <label className="form-label mb-1 fw-semibold">Category:</label>
-                            <select className="form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(parseInt(e.target.value))}>
-                                {category.map(e => {
-                                    return <option value={e.id} key={e.id}>{e.name}</option>
-                                })}
-                            </select>
-                        </div>}
+                            !categoryLoading && <div className="mb-3">
+                                <label className="form-label mb-1 fw-semibold">Category:</label>
+                                <select className="form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(parseInt(e.target.value))}>
+                                    {category.map(e => {
+                                        return <option value={e.id} key={e.id}>{e.name}</option>
+                                    })}
+                                </select>
+                            </div>}
                         <div className="text-center">
                             <button className="btn btn-primary" disabled={editLoading}>
                                 {editLoading ?
@@ -154,3 +154,4 @@ const EditBook = () => {
 }
 
 export default EditBook
+    

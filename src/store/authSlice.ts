@@ -20,11 +20,12 @@ export const authSlice = createSlice({
     loginUser: (state, action: PayloadAction<User>) => {
       state.isAuth = true;
       state.user = action.payload;
+      localStorage.setItem("isLogin" , "true")
     },
     logOut: (state) => {
-      localStorage.removeItem("access_token");
       state.isAuth = false;
       state.user = null;
+      localStorage.setItem("isLogin" , "false")
     },
   },
 });

@@ -31,13 +31,13 @@ const AddBook = () => {
     const [selectedAuthor, setSelectedAuthor] = useState(-1)
     const { Books: category, isLoading: categoryLoading } = UseFetch<category[]>("/Category", [])
     const { Books: author, isLoading: authorLoading } = UseFetch<author[]>("/Author", [])
-    
+
 
     useEffect(() => {
         !authorLoading && setSelectedAuthor(author[0].id)
         !categoryLoading && setSelectedCategory(category[0].id)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [category , author]);
+    }, [category, author]);
     return (<>
 
         <div className="row justify-content-center">
@@ -53,7 +53,7 @@ const AddBook = () => {
                     bookData.append("PageCount", String(data.PageCount))
                     bookData.append("ImageFile", data.ImageFile[0])
                     bookData.append("PublisherId", 1 + "")
-                    bookData.append("AuthorId",  String(selectedAuthor))
+                    bookData.append("AuthorId", String(selectedAuthor))
                     bookData.append("CategoryId", String(selectedCategory))
                     setAddLoading(true)
                     ApiClicent.post(`/Book`, bookData).then(() => {

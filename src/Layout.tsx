@@ -5,7 +5,8 @@ import { logOut } from "./store/authSlice";
 import { ToastContainer } from "react-toastify";
 
 const Header = () => {
-    const { isAuth, user } = useAppSelector((state) => state);
+    const isAuth = true
+    // const { isAuth, user } = useAppSelector((state) => state);
     const [toggleNavBar, setToggleNavBar] = useState(false);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -60,6 +61,17 @@ const Header = () => {
                                     Dashboard
                                 </NavLink>
                             </li>
+                            <li className="nav-item">
+                                <NavLink
+                                    to="/Cart"
+                                    className={({ isActive }) => {
+                                        return isActive ? "nav-link active" : "nav-link";
+                                    }}
+                                    aria-current="page"
+                                >
+                                    Cart
+                                </NavLink>
+                            </li>
                         </ul>
                         {isAuth == false ? (
                             <ul className="navbar-nav">
@@ -89,7 +101,7 @@ const Header = () => {
                         ) : (
                             <ul className="navbar-nav">
                                 <li className="nav-item">
-                                    <span className="nav-link">Welcome, {user?.firstname}</span>
+                                    <span className="nav-link">Welcome, kamel</span>
                                 </li>
                                 <li className="nav-item">
                                     <button
