@@ -6,7 +6,7 @@ const DashboardHome = () => {
     
     return (
         <div className='mt-4'>
-            <ul className='list-unstyled d-flex gap-3 justify-content-center dashboard-links'>
+            <ul className=' list-unstyled d-flex flex-wrap gap-3 justify-content-center dashboard-links'>
                 <li>
                     <NavLink  to={"/dashboard/"} className={({ isActive }) => {
                         return `${isActive && "active"} ${active == 0 && "active"}`

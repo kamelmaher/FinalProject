@@ -5,7 +5,7 @@ type BookContainerProps = {
 }
 const BookContainer = ({ arr }: BookContainerProps) => {
     return <>
-        <div className='row mt-5 justify-content-between pt-4'>
+        <div className='row mt-5 justify-content-between p-3 pt-4'>
             {
                 arr.length > 0 ?
                     arr.map((e, index) => {

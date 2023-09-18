@@ -37,7 +37,7 @@ function App() {
           </div>
         </div>
         {isLoading ?
-          <div className="row">
+          <div className="row p-3">
             <PlaceHolder />
             <PlaceHolder />
             <PlaceHolder />

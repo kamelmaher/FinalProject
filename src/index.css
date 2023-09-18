@@ -97,6 +97,9 @@ body {
     color: var(--main-color);
 }
 
+.dashboard-links li  {
+    margin-bottom: 15px;
+}
 .dashboard-links li a {
     background-color: #323232;
     text-decoration: none !important;
