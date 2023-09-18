@@ -13,7 +13,7 @@ const PlaceHolder = () => {
                         <span className="placeholder col-6"></span>
                         <span className="placeholder col-8"></span>
                     </p>
-                    <a className="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+                    <a className="btn btn-success disabled placeholder col-6" aria-disabled="true"></a>
                 </div>
             </div>
         </div>

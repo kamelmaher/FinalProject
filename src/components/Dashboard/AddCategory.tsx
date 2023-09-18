@@ -1,21 +1,25 @@
 import { useForm } from "react-hook-form"
 import ApiClicent from "../../services/ApiClicent"
-import UseFetch from "../../UseFetch"
+
 import { category } from "../../types/Book"
 import { useEffect, useState } from "react"
 import Modal from "../../Portals/Modal"
 import { toast } from "react-toastify"
 import TablePlaceHolder from "./TablePlaceHolder"
+import UseFetch from "../../services/UseFetch"
 type formData = {
     name: string
 }
 const AddCategory = () => {
     const { Books, isLoading: categoryLoading } = UseFetch<category[]>("/Category", [])
     const [Category, setCategory] = useState<category[]>([])
-    const [ModalLoading, setModalLoading] = useState(false)
+    const [deleteLoading, setDeleteLoading] = useState(false)
     const [show, setShow] = useState(false)
     const [id, setId] = useState(-1)
     const [addLoading, setAddLoading] = useState(false);
+    const[isEditing , setIsEditing] = useState(false)
+    const [editValue , setEditValue] = useState("")
+    const [editId , setEditID] = useState(-1)
     useEffect(() => {
         setCategory(Books)
     }, [Books])
@@ -27,22 +31,34 @@ const AddCategory = () => {
             <div className="col-6">
                 <form onSubmit={handleSubmit(data => {
                     setAddLoading(true)
-                    ApiClicent.post("/Category", data).then(({ data }) => {
-                        setCategory([...Category, data])
-                        setAddLoading(false)
-                        toast.success("Category has been Added Successfully!");
-                        reset()
-                    })
+                    isEditing ?
+                        ApiClicent.put("/Category/" + editId, { name: editValue }).then(data => {
+                            console.log(data)
+                            setAddLoading(false)
+                            toast.success("Category Updated Successfully!")
+                            reset()
+                        })
+                        :
+                        ApiClicent.post("/Category", data).then(({ data }) => {
+                            setCategory([...Category, data])
+                            setAddLoading(false)
+                            reset()
+                            toast.success(`Category has been Added Successfully!`)
+                        })
                 })}>
                     <h3 className="mb-3 text-center fw-semibold">Add Category</h3>
                     <div>
                         <label className="mb-2">Name:</label>
-                        <input type="text" className="form-control" {...register("name", { required: "true", minLength: 5 })} />
+                        {isEditing ? <input type="text" className="form-control" {...register("name", { required: true })} value={editValue} onChange={(e) => {
+                            setEditValue(e.target.value)
+                        }} />
+                        :
+                        <input type="text" className="form-control" {...register("name", { required: "true" })} />}
                     </div>
                     {errors.name?.type == "required" && <p className="text-danger">Category is required</p>}
                     {errors.name?.type == "minLength" && <p className="text-danger">Category is too small</p>}
                     <div className="mt-3 text-center">
-                        <button className="btn btn-primary">
+                        <button className="btn btn-success">
                             {addLoading ?
                                 <>
                                     <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
@@ -54,15 +70,21 @@ const AddCategory = () => {
             </div>
 
             {/* Table */}
-            <div className="col-12">
-                {categoryLoading ?
-                    <TablePlaceHolder />
-                    :
-                    <table className="table mt-4 text-center">
+            <div className="col-12" style={{
+                width: "100%",
+                overflowX: "auto",
+            }}>{
+                    categoryLoading ?
+                        <TablePlaceHolder />
+                        :
+                        <table className="mt-4 table text-center" style={{
+                            minWidth: "600px",
+                        }}>
                         <thead>
                             <tr>
                                 <th>id</th>
                                 <th>Category</th>
+                                <th>Edit</th>
                                 <th>Delete</th>
                             </tr>
                         </thead>
@@ -70,7 +92,12 @@ const AddCategory = () => {
                             {Category.map((e, index) => {
                                 return <tr key={e.id}>
                                     <td>{index + 1}</td>
-                                    <td>{e.name}</td>
+                                    <td>{isEditing && e.id == editId ? editValue : e.name}</td>
+                                    <td><button className="btn btn-outline-success" onClick={()=> {
+                                        setIsEditing(true)
+                                        setEditID(e.id)
+                                        setEditValue(e.name)
+                                    }}>Edit</button></td>
                                     <td><button className="btn btn-outline-danger" onClick={() => {
                                         setId(e.id)
                                         console.log(e.id)
@@ -94,16 +121,21 @@ const AddCategory = () => {
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => setShow(false)}>Close</button>
-                        <button type="button" disabled={ModalLoading} className="btn btn-outline-danger" onClick={() => {
-                            setModalLoading(true)
+                        <button type="button" disabled={deleteLoading} className="btn btn-outline-danger" onClick={() => {
+                            setDeleteLoading(true)
                             ApiClicent.delete(`/Category/${id}`).then(() => {
-                                setModalLoading(false)
+                                setDeleteLoading(false)
                                 setCategory(Category.filter(e => e.id != id))
-                                toast.success(`Category has been Deleted Succefully!`);
+                                toast.success(`Category has been Deleted Successfully!`);
                                 setShow(false)
+                            }).catch(err => {
+                                setDeleteLoading(false)
+                                toast.warning(err.response.data.message)
+                                setShow(false)
+                                
                             })
                         }}>
-                            {ModalLoading ? <>
+                            {deleteLoading ? <>
                                 <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
                                 <span role="status">Loading...</span>
                             </>

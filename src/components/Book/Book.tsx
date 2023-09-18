@@ -1,21 +1,24 @@
 import { Rating } from "@mui/material"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { BookType } from "../../types/Book"
 type BookProps = {
     book: BookType,
 }
 const Book = ({ book }: BookProps) => {
+    const navigate = useNavigate()
     return (
         <div className="mb-5 col-lg-5 col-md-6">
-            <div className="rounded row pb-3 bg-white book">
-                <div className="col-md-5 image">
-                    <img src={`http://wfatairreact-001-site1.ctempurl.com/api/Images/${book.image}`} alt="" width={"100%"} className="rounded" />
+            <div className="rounded row bg-white book">
+                <div className="col-md-5 p-0 image">
+                    <img src={`http://wfatairreact-001-site1.ctempurl.com/api/Images/${book.image}`} alt="" width={"100%"} height={"100%"} className="rounded book-img" />
                 </div>
                 <div className="col-md-6 text-center text-md-start ">
                     <div className="pt-4">
                         <div className="mb-2 ">
                             <div>
-                                <Link style={{ display: "block" }} to={`book/details/${book.id}`} className="fw-semibold" >{book.name}</Link>
+                                <h4 style={{ cursor: "pointer" }} className="book-name" onClick={() => {
+                                    navigate(`book/details/${book.id}`)
+                                }}>{book.name}</h4>
                                 <span style={{ fontSize: "13px" }} className="text-black-50">by {book.author.name}</span>
                             </div>
                             <span style={{ fontSize: "13px" }} className="text-success fw-semibold">Category: {book.category.name}</span>

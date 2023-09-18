@@ -14,25 +14,26 @@ import EditBook from "./components/Dashboard/EditBook.tsx"
 import Books from './components/Dashboard/Books.tsx'
 import AddAuthor from './components/Dashboard/AddAuthor.tsx'
 import AddCategory from './components/Dashboard/AddCategory.tsx'
-import Protected from './Protected.tsx'
 import Cart from './components/Cart/Cart.tsx'
+import Protected from './Protected.tsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Layout />}>
       <Route index path='/' element={<App />}></Route>
-      <Route index path='/Login' element={<Login />}></Route>
-      <Route index path='/Register' element={<Register />}></Route>
-      <Route path='/dashboard' element={<Protected>
+      <Route path='/Login' element={<Login />}></Route>
+      <Route path='/Register' element={<Register />}></Route>
+
+      <Route path='dashboard/*' element={<Protected>
         <DashboardHome />
-      </Protected>
-    }>
+      </Protected>}>
         <Route index element={<Books />}></Route>
-        <Route path='/dashboard/books/add' element={<AddBook />}></Route>
-        <Route path='/dashboard/books/edit/:bookid' element={<EditBook />}></Route>
-        <Route path='/dashboard/books/author' element={<AddAuthor />}></Route>
-        <Route path='/dashboard/books/category' element={<AddCategory />}></Route>
+        <Route path='add' element={<AddBook />}></Route>
+        <Route path='edit/:bookid' element={<EditBook />}></Route>
+        <Route path='author' element={<AddAuthor />}></Route>
+        <Route path='category' element={<AddCategory />}></Route>
       </Route>
+
       <Route path='book/details/:bookid' element={<BookDetails />}>
       </Route>
       <Route path='/Cart' element={<Cart />}>

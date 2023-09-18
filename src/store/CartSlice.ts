@@ -17,11 +17,11 @@ export const CartSlice = createSlice({
       state.items.push(action.payload);
       localStorage.setItem("cartItems", JSON.stringify(state.items));
     },
-    removeCartItem: (state , action:PayloadAction<number>) => {
-        state.items = state.items.filter(e => e.id != action.payload)
-    }
+    removeCartItem: (state, action: PayloadAction<number>) => {
+      state.items = state.items.filter((e) => e.id != action.payload);
+    },
   },
 });
 
 export default CartSlice.reducer;
-export const { addToCart , removeCartItem } = CartSlice.actions;
+export const { addToCart, removeCartItem } = CartSlice.actions;

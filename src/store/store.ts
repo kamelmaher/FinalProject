@@ -1,6 +1,6 @@
 /** @format */
 
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 // import authSlice from "./authSlice";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import {
@@ -15,13 +15,17 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import CartSlice from "./CartSlice";
+import authSlice from "./authSlice";
 
 const persistConfig = {
   key: "root",
   storage,
 };
-
-const persistedReducer = persistReducer(persistConfig, CartSlice);
+const rootReducer = combineReducers({
+  cart: CartSlice,
+  auth: authSlice,
+});
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,

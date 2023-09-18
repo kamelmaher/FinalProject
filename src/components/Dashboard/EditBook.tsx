@@ -5,8 +5,8 @@ import { useEffect, useState } from "react"
 import ApiClicent from "../../services/ApiClicent"
 import { useNavigate, useParams } from "react-router-dom"
 import { BookType, author, category } from "../../types/Book"
-import UseFetch from "../../UseFetch"
 import { toast } from "react-toastify"
+import UseFetch from "../../services/UseFetch"
 
 const EditBook = () => {
     const MAX_FILE_SIZE = 500000;
@@ -51,7 +51,7 @@ const EditBook = () => {
     return <>
         {
             !isLoading && <div className="row justify-content-center">
-                <div className="col-md-6">
+                <div className="col-md-10">
                     <form onSubmit={handleSubmit(data => {
                         console.log(selectedAuthor)
                         console.log(selectedCategory)
@@ -72,71 +72,95 @@ const EditBook = () => {
                             navigate("/dashboard")
                         })
                     })}>
-                        <h4 className="mb-3 text-center">Edit Book</h4>
-                        <div className="mb-3">
-                            <label className="form-label mb-1 fw-semibold">Name:</label>
-                            <input {...register("Name")} type="text" className="form-control" onChange={(e) => {
-                                setBook({ ...book, name: e.target.value })
-                            }} />
-                            {errors.Name?.message && <p className="text-danger">{errors.Name.message}</p>}
+                        <h4 className=" text-center">Edit Book</h4>
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className="">
+                                    <label className="form-label mb-1 fw-semibold">Name:</label>
+                                    <input {...register("Name")} type="text" className="form-control" onChange={(e) => {
+                                        setBook({ ...book, name: e.target.value })
+                                    }} />
+                                    {errors.Name?.message && <p className="text-danger">{errors.Name.message}</p>}
+                                </div>
+                            </div>
+                            <div className="col-lg-6">
+                                <div className="">
+                                    <label className="form-label mb-1 fw-semibold">Image:</label>
+                                    <input type="file" accept="image/*" {...register("ImageFile")} className="form-control" />
+                                    {errors.ImageFile?.message && <p className="text-danger mt-2">{errors.ImageFile.message}</p>}
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="mb-3">
-                            <label className="form-label mb-1 fw-semibold">Image:</label>
-                            <input type="file" accept="image/*" {...register("ImageFile")} className="form-control" />
-                            {errors.ImageFile?.message && <p className="text-danger mt-2">{errors.ImageFile.message}</p>}
+                        <div className="row">
+                            <div className="col-lg-6 p-2">
+                                <div className="">
+                                    <label className="form-label mb-1 fw-semibold">price:</label>
+                                    <input {...register("Price", { valueAsNumber: true })} type="number" className="form-control" value={book.price} onChange={(e) => {
+                                        setBook({ ...book, price: parseInt(e.target.value) })
+                                    }} />
+                                    {errors.Price?.message && <p className="text-danger">{errors.Price.message}</p>}
+                                </div>
+                            </div>
+                            <div className="col-lg-6 p-2">
+                                <div>
+                                    <label className="form-label mb-1 fw-semibold">About:</label>
+                                    <input {...register("About")} type="text" className="form-control" value={book.about} onChange={(e) => {
+                                        setBook({ ...book, about: e.target.value })
+                                    }} />
+                                    {errors.About?.message && <p className="text-danger">{errors.About.message}</p>}
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="mb-3">
-                            <label className="form-label mb-1 fw-semibold">price:</label>
-                            <input {...register("Price", { valueAsNumber: true })} type="number" className="form-control" value={book.price} onChange={(e) => {
-                                setBook({ ...book, price: parseInt(e.target.value) })
-                            }} />
-                            {errors.Price?.message && <p className="text-danger">{errors.Price.message}</p>}
-                        </div>
+                        <div className="row">
+                            <div className="col-lg-6 p-2">
+                                <div className="">
+                                    <label className="form-label mb-1 fw-semibold">Publish Year:</label>
+                                    <input {...register("PublishYear", { valueAsNumber: true })} type="number" className="form-control" value={book.publishYear} onChange={(e) => {
+                                        setBook({ ...book, publishYear: parseInt(e.target.value) })
+                                    }} />
+                                    {errors.PublishYear?.message && <p className="text-danger">{errors.PublishYear.message}</p>}
+                                </div>
 
-                        <div className="mb-3">
-                            <label className="form-label mb-1 fw-semibold">About:</label>
-                            <input {...register("About")} type="text" className="form-control" value={book.about} onChange={(e) => {
-                                setBook({ ...book, about: e.target.value })
-                            }} />
-                            {errors.About?.message && <p className="text-danger">{errors.About.message}</p>}
-                        </div>
+                            </div>
+                            <div className="col-lg-6 p-2">
 
-                        <div className="mb-3">
-                            <label className="form-label mb-1 fw-semibold">Publish Year:</label>
-                            <input {...register("PublishYear", { valueAsNumber: true })} type="number" className="form-control" value={book.publishYear} onChange={(e) => {
-                                setBook({ ...book, publishYear: parseInt(e.target.value) })
-                            }} />
-                            {errors.PublishYear?.message && <p className="text-danger">{errors.PublishYear.message}</p>}
+                                <div className="">
+                                    <label className="form-label mb-1 fw-semibold">Page Count:</label>
+                                    <input {...register("PageCount", { valueAsNumber: true })} type="number" className="form-control" value={book.pageCount} onChange={(e) => {
+                                        setBook({ ...book, pageCount: parseInt(e.target.value) })
+                                    }} />
+                                    {errors.PageCount?.message && <p className="text-danger">{errors.PageCount.message}</p>}
+                                </div>
+                            </div>
                         </div>
-
-                        <div className="mb-3">
-                            <label className="form-label mb-1 fw-semibold">Page Count:</label>
-                            <input {...register("PageCount", { valueAsNumber: true })} type="number" className="form-control" value={book.pageCount} onChange={(e) => {
-                                setBook({ ...book, pageCount: parseInt(e.target.value) })
-                            }} />
-                            {errors.PageCount?.message && <p className="text-danger">{errors.PageCount.message}</p>}
+                        <div className="row">
+                            <div className="col-lg-6 p-2">
+                                {!authorLoading && <div className="">
+                                    <label className="form-label mb-1 fw-semibold">Author:</label>
+                                    <select className="form-select" value={selectedAuthor} onChange={(e) => setSelectedAuthor(parseInt(e.target.value))}>
+                                        {author.map(e => {
+                                            return <option value={e.id} key={e.id}>{e.name}</option>
+                                        })}
+                                    </select>
+                                </div>}
+                            </div>
+                            <div className="col-lg-6 p-2">
+                                
+                                {
+                                    !categoryLoading && <div className="">
+                                        <label className="form-label mb-1 fw-semibold">Category:</label>
+                                        <select className="form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(parseInt(e.target.value))}>
+                                            {category.map(e => {
+                                                return <option value={e.id} key={e.id}>{e.name}</option>
+                                            })}
+                                        </select>
+                                    </div>}
+                                            </div>
                         </div>
-                        {!authorLoading && <div className="mb-3">
-                            <label className="form-label mb-1 fw-semibold">Author:</label>
-                            <select className="form-select" value={selectedAuthor} onChange={(e) => setSelectedAuthor(parseInt(e.target.value))}>
-                                {author.map(e => {
-                                    return <option value={e.id} key={e.id}>{e.name}</option>
-                                })}
-                            </select>
-                        </div>}
-                        {
-                            !categoryLoading && <div className="mb-3">
-                                <label className="form-label mb-1 fw-semibold">Category:</label>
-                                <select className="form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(parseInt(e.target.value))}>
-                                    {category.map(e => {
-                                        return <option value={e.id} key={e.id}>{e.name}</option>
-                                    })}
-                                </select>
-                            </div>}
-                        <div className="text-center">
-                            <button className="btn btn-primary" disabled={editLoading}>
+                        <div className="text-center mt-2">
+                            <button className="btn btn-success" disabled={editLoading}>
                                 {editLoading ?
                                     <>
                                         <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
@@ -154,4 +178,3 @@ const EditBook = () => {
 }
 
 export default EditBook
-    

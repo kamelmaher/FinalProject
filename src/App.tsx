@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
-import './App.css'
 import BookContainer from './components/Book/BookContainer';
-import { BookType } from './types/Book';
-import UseFetch from './UseFetch';
+import { BookType, category } from './types/Book';
+import UseFetch from './services/UseFetch';
 import PlaceHolder from './components/Book/PlaceHolder';
 
 function App() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(-1);
   const { Books, isLoading } = UseFetch<BookType[]>("/Book", []);
   const [selctedBooks, setSelectedBooks] = useState<BookType[]>([]);
+  const { Books:category } = UseFetch<category[]>("/Category", [])
   useEffect(() => {
     setSelectedBooks(Books);
   }, [Books]);
@@ -23,11 +23,15 @@ function App() {
           </div>
           <div className="col-md-8">
             <ul className='list-unstyled d-flex flex-wrap gap-3 tabs '>
-              {["All Books", "Business", "Science", "Fiction", "Philosophy", "Biology"].map((e, index) => {
-                return <li key={index} className={`${active == index && "active"}`} onClick={() => {
+              <li className={`${active == -1 && "active"}`} onClick={() => {
+                setSelectedBooks(Books)
+                setActive(-1)
+              }}>All Books</li>
+              {category.map((e, index) => {
+                return <li key={index + 1} className={`${active == index && "active"} filter`} onClick={() => {
                   setActive(index);
-                  setSelectedBooks(e == "All Books" ? Books : Books.filter(t => t.category.name == e))
-                }}>{e}</li>
+                  setSelectedBooks(e.name == "All Books" ? Books : Books.filter(t => t.category.name == e.name))
+                }}>{e.name}</li>
               })}
             </ul>
           </div>

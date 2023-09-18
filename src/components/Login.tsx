@@ -1,13 +1,14 @@
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../store/store";
 import { loginUser } from "../store/authSlice";
 import { User } from "../types/User";
 import axios from "axios";
 import { useState } from "react";
 import AuthService from "../services/AuthService";
+import { toast } from "react-toastify";
 
 const schema = z.object({
     email: z.string().email(),
@@ -27,8 +28,6 @@ const Login = () => {
     } = useForm<FormData>({ resolver: zodResolver(schema) });
 
     const handleLogin = (data: FormData) => {
-        // Axios Call
-
         AuthService.LoginUser(data.email, data.password)
             .then(({ data }) => {
                 const user: User = {
@@ -36,11 +35,9 @@ const Login = () => {
                     firstname: data.firstName,
                     lastname: data.lastName,
                 };
-
-                localStorage.setItem("access_token", data.token);
-
                 dispatch(loginUser(user));
                 navigate("/", { replace: true });
+                toast.success("Login Successfully!")
             })
             .catch((err) => {
                 if (axios.isAxiosError(err)) {
@@ -77,13 +74,15 @@ const Login = () => {
                                     <input {...register("password")} className="form-control" type="password" id="password" />
                                     {errors.password && <span className="text-danger">{errors.password.message}</span>}
                                 </div>
-                                <button className="btn btn-primary" type="submit">
+                                <button className="btn btn-success" type="submit">
                                     Login
                                 </button>
                                 <br />
-                                <NavLink className="d-block my-3" to={"/Register"}>
+                                <p style={{cursor:"pointer" , marginTop: "10px"}} onClick={()=> {
+                                    navigate("/signup")
+                                }}>
                                     Don't have an account, Register Now!
-                                </NavLink>
+                                </p>
                             </form>
                         </div>
                     </div>

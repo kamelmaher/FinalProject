@@ -1,11 +1,11 @@
 import { BookType } from "../../types/Book"
 import { NavLink } from "react-router-dom"
-import UseFetch from "../../UseFetch"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import ApiClicent from "../../services/ApiClicent"
 import Modal from "../../Portals/Modal"
 import TablePlaceHolder from "./TablePlaceHolder"
+import UseFetch from "../../services/UseFetch"
 
 const Books = () => {
     const [id, setId] = useState(-1)
@@ -46,11 +46,11 @@ const Books = () => {
                             return <tr key={index} >
                                 <td>{index + 1}</td>
                                 <td><NavLink to={`/book/details/${e.id}`} className={"fw-semibold text-success"} style={{ textDecoration: "none" }}>{e.name}</NavLink></td>
-                                <td>${e.price}</td>
+                                <td className="fw-semibold">${e.price}</td>
                                 <td>{e.publishYear}</td>
                                 <td>{e.category.name}</td>
                                 <td>{e.author.name}</td>
-                                <td><NavLink to={`/dashboard/books/edit/${e.id}`} className="btn btn-outline-success">Edit</NavLink></td>
+                                <td><NavLink className="btn btn-success" to={`/dashboard/edit/${e.id}`}>Edit</NavLink></td>
                                 <td><button className="btn btn-outline-danger" onClick={() => {
                                     setShow(true)
                                     setId(e.id)
