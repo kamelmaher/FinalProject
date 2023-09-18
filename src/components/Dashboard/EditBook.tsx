@@ -19,9 +19,10 @@ const EditBook = () => {
         PageCount: z.number().min(10, { message: "Page Count is Required" }),
         ImageFile: z
             .instanceof(FileList)
-            .refine((files) => files?.length == 1, "Image is required.")
-            .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
-            .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
+            .refine((files) => (files[0] == null ? true : files?.[0]?.size <= MAX_FILE_SIZE), `Max file size is 5MB.`)
+            .refine((files) => (files[0] == null ? true : ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type)), ".jpg, .jpeg, .png and .webp files are accepted.")
+            .optional()
+            .optional(),
     })
     type BookFormData = z.infer<typeof schema>
     const { register, setValue, handleSubmit, formState: { errors } } = useForm<BookFormData>({
@@ -38,30 +39,27 @@ const EditBook = () => {
     useEffect(() => {
         setIsLoading(true);
         ApiClicent.get(`/Book/${bookid}`).then(({ data }) => {
-            setValue("ImageFile", data.image[0])
             setValue("Name", data.name)
             setSelectedAuthor(data.author.id)
             setSelectedCategory(data.category.id)
             setBook(data)
             setIsLoading(false)
+            console.log(data)
         })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [bookid, setValue])
     const navigate = useNavigate()
     return <>
         {
             !isLoading && <div className="row justify-content-center">
                 <div className="col-md-10">
                     <form onSubmit={handleSubmit(data => {
-                        console.log(selectedAuthor)
-                        console.log(selectedCategory)
                         const formData = new FormData();
                         formData.append("Name", data.Name)
                         formData.append("Price", data.Price + "")
                         formData.append("About", data.About)
                         formData.append("PublishYear", String(data.PublishYear))
                         formData.append("PageCount", String(data.PageCount))
-                        formData.append("image", data.ImageFile[0])
+                        if(data.ImageFile) formData.append("image", data.ImageFile[0])
                         formData.append("AuthorId", selectedAuthor + "")
                         formData.append("PublisherId", 1 + "")
                         formData.append("CategoryId", selectedCategory + "")
@@ -86,7 +84,7 @@ const EditBook = () => {
                             <div className="col-lg-6">
                                 <div className="">
                                     <label className="form-label mb-1 fw-semibold">Image:</label>
-                                    <input type="file" accept="image/*" {...register("ImageFile")} className="form-control" />
+                                    <input type="file" {...register("ImageFile")} className="form-control" />
                                     {errors.ImageFile?.message && <p className="text-danger mt-2">{errors.ImageFile.message}</p>}
                                 </div>
                             </div>
